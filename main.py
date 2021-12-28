@@ -1,48 +1,64 @@
-import os
-import smtplib, ssl, getpass
-import imaplib
-import os
-from dotenv import load_dotenv
+from __future__ import print_function
 
-load_dotenv()
+import os.path
+from re import sub
 
-sender_email = os.getenv("ACCOUNT")
-password = os.getenv("PASS")
+from google.auth.transport.requests import Request
+from google.oauth2.credentials import Credentials
+from google_auth_oauthlib.flow import InstalledAppFlow
+from googleapiclient.discovery import build
+from googleapiclient.errors import HttpError
 
-port = 465
-receiver_email = "zach@shapeways.com"
+# If modifying these scopes, delete the file token.json.
+SCOPES = ['https://www.googleapis.com/auth/gmail.readonly']
 
-mail = imaplib.IMAP4_SSL('imap.gmail.com')
-mail.login(sender_email, password)
-mail.list()
-mail.select("inbox")
 
-result, data = mail.search(None, "ALL")
-ids = data[0] # data is a list.
-id_list = ids.split() # ids is a space separated string
-latest_email_id = id_list[-1] # get the latest
-result, data = mail.fetch(latest_email_id, "(RFC822)") # fetch the email body (RFC822) for the given ID
-raw_email = data[0][1] # here's the body, which is raw text of the whole email
-# including headers and alternate payloads
-print(ids)
+def main():
+    """Shows basic usage of the Gmail API.
+    Lists the user's Gmail labels.
+    """
+    creds = None
+    # The file token.json stores the user's access and refresh tokens, and is
+    # created automatically when the authorization flow completes for the first
+    # time.
+    if os.path.exists('token.json'):
+        creds = Credentials.from_authorized_user_file('token.json', SCOPES)
+    # If there are no (valid) credentials available, let the user log in.
+    if not creds or not creds.valid:
+        if creds and creds.expired and creds.refresh_token:
+            creds.refresh(Request())
+        else:
+            flow = InstalledAppFlow.from_client_secrets_file(
+                'creds.json', SCOPES)
+            creds = flow.run_local_server(port=0)
+        # Save the credentials for the next run
+        with open('token.json', 'w') as token:
+            token.write(creds.to_json())
 
-# message = """
-# Account: 
-# Model(s): 
-# Directional Quote [D] or Production [P]: 
-# # of Models to Quote (Quantity): 
-# Quantities to quote of each Model: 
-# Technology: 
-# Material: 
-# Finish: 
-# Expected Lead Time: 
-# Additional Instructions/Comments: 
-# End Use:
-# """
+    try:
+        # Call the Gmail API
+        service = build('gmail', 'v1', credentials=creds)
+        threads = service.users().threads().list(
+            userId='me', q='to:additive.mfg@shapeways.com').execute().get('threads', [])
+        # TODO: Change the email address to "rfq.template@shapeways.com"
+        for thread in threads:
+            tdata = service.users().threads().get(
+                userId='me', id=thread['id']).execute()
+            nmsgs = len(tdata['messages'])
 
-# context = ssl.create_default_context()
+            if nmsgs == 1:
+                msg = tdata['messages'][0]['payload']
+                subject = ''
+                for header in msg['headers']:
+                    if header['name'] == 'Subject':
+                        subject = header['value']
+                        break
+                if subject:
+                    print('%s (%d messages)' % (subject, nmsgs))
+    except HttpError as error:
+        # TODO(developer) - Handle errors from gmail API.
+        print(f'An error occurred: {error}')
 
-# with smtplib.SMTP_SSL("smtp.gmail.com", port, context=context) as server:
-#     server.login("rfq.template.test@gmail.com", password)
-#     server.login(sender_email, password)
-#     server.sendmail(sender_email, receiver_email, message)
+
+if __name__ == '__main__':
+    main()
