@@ -1,9 +1,21 @@
+import os
 import smtplib, ssl, getpass
+import imaplib
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+sender_email = os.getenv("ACCOUNT")
+password = os.getenv("PASS")
 
 port = 465
-sender_email = "rfq.template.test@gmail.com"
 receiver_email = "zach@shapeways.com"
-password = getpass("Password:")
+
+mail = imaplib.IMAP4_SSL('imap.gmail.com')
+mail.login(sender_email, password)
+mail.list()
+mail.select("inbox")
 
 message = """
 Account: 
