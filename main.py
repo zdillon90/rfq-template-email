@@ -13,6 +13,11 @@ from googleapiclient.errors import HttpError
 SCOPES = ['https://www.googleapis.com/auth/gmail.readonly']
 
 
+def send_email():
+    # Reply to the specific thread with the RFQ template
+    pass
+
+
 def main():
     """Shows basic usage of the Gmail API.
     Lists the user's Gmail labels.
@@ -39,16 +44,20 @@ def main():
         # Call the Gmail API
         service = build('gmail', 'v1', credentials=creds)
         threads = service.users().threads().list(
-            userId='me', q='to:additive.mfg@shapeways.com').execute().get('threads', [])
-        # TODO: Change the email address to "rfq.template@shapeways.com"
+            userId='me', q='to:zach@shapeways.com from:zdillon90@gmail.com subject:rfq-test').execute().get('threads', [])
         for thread in threads:
+            thread_id = thread['id']
             tdata = service.users().threads().get(
-                userId='me', id=thread['id']).execute()
+                userId='me', id=thread_id).execute()
             nmsgs = len(tdata['messages'])
 
             if nmsgs == 1:
+                # TODO: Add reply to email here
+                send_email(thread_id)
+
                 msg = tdata['messages'][0]['payload']
                 subject = ''
+                print(thread_id)
                 for header in msg['headers']:
                     if header['name'] == 'Subject':
                         subject = header['value']
