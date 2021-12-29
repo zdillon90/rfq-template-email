@@ -2,6 +2,7 @@ from __future__ import print_function
 
 import os.path
 from re import sub
+import json
 
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
@@ -13,9 +14,38 @@ from googleapiclient.errors import HttpError
 SCOPES = ['https://www.googleapis.com/auth/gmail.readonly']
 
 
-def send_email():
-    # Reply to the specific thread with the RFQ template
-    pass
+template = """
+Account: 
+Model(s): 
+Directional Quote [D] or Production [P]: 
+# of Models to Quote (Quantity): 
+Quantities to quote of each Model: 
+Technology: 
+Material: 
+Finish: 
+Expected Lead Time: 
+Additional Instructions/Comments: 
+End Use:
+"""
+
+
+def create_message(sender, to, subject, message_text):
+    """Create a message for an email.
+
+    Args:
+      sender: Email address of the sender.
+      to: Email address of the receiver.
+      subject: The subject of the email message.
+      message_text: The text of the email message.
+
+    Returns:
+      An object containing a base64url encoded email object.
+    """
+    message = MIMEText(message_text)
+    message['to'] = to
+    message['from'] = sender
+    message['subject'] = subject
+    return {'raw': base64.urlsafe_b64encode(message.as_string())}
 
 
 def main():
@@ -47,23 +77,31 @@ def main():
             userId='me', q='to:zach@shapeways.com from:zdillon90@gmail.com subject:rfq-test').execute().get('threads', [])
         for thread in threads:
             thread_id = thread['id']
-            tdata = service.users().threads().get(
+            t_data = service.users().threads().get(
                 userId='me', id=thread_id).execute()
-            nmsgs = len(tdata['messages'])
+            n_msgs = len(t_data['messages'])
+            with open('output.json', 'w') as outfile:
+                json.dump(t_data, outfile)
 
-            if nmsgs == 1:
-                # TODO: Add reply to email here
-                send_email(thread_id)
-
-                msg = tdata['messages'][0]['payload']
-                subject = ''
+            if n_msgs == 1:
                 print(thread_id)
+                msg = t_data['messages'][0]['payload']
+                subject = ''
+                from_email = ''
+                to_email = ''
                 for header in msg['headers']:
                     if header['name'] == 'Subject':
                         subject = header['value']
                         break
-                if subject:
-                    print('%s (%d messages)' % (subject, nmsgs))
+                    if header['name'] == 'From':
+                        from_email = header['value']
+                        break
+                    if header['name'] == 'To':
+                        to_email = header['value']
+                        break
+                # TODO: Add reply to email here
+                template_msg = create_message(
+                    from_email, to_email, subject, template)
     except HttpError as error:
         # TODO(developer) - Handle errors from gmail API.
         print(f'An error occurred: {error}')

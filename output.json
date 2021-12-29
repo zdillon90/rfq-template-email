@@ -1,0 +1,149 @@
+{
+    "id": "17e081f3f29f69af",
+    "historyId": "13852835",
+    "messages": [
+        {
+            "id": "17e081f3f29f69af",
+            "threadId": "17e081f3f29f69af",
+            "labelIds": [
+                "UNREAD",
+                "CATEGORY_PERSONAL",
+                "INBOX"
+            ],
+            "snippet": "I&#39;m an RFQ request, whoo!",
+            "payload": {
+                "partId": "",
+                "mimeType": "multipart/alternative",
+                "filename": "",
+                "headers": [
+                    {
+                        "name": "Delivered-To",
+                        "value": "zach@shapeways.com"
+                    },
+                    {
+                        "name": "Received",
+                        "value": "by 2002:a59:ddd6:0:b0:248:c434:fc18 with SMTP id e22csp11817921vqc;        Wed, 29 Dec 2021 13:36:12 -0800 (PST)"
+                    },
+                    {
+                        "name": "X-Received",
+                        "value": "by 2002:a2e:a48b:: with SMTP id h11mr19911153lji.448.1640813772397;        Wed, 29 Dec 2021 13:36:12 -0800 (PST)"
+                    },
+                    {
+                        "name": "ARC-Seal",
+                        "value": "i=1; a=rsa-sha256; t=1640813772; cv=none;        d=google.com; s=arc-20160816;        b=TEyna+1VBvz0t5OBwTjZqdsAhDig/UT82uPOrL/MKLvzYBBJHn+QOHaaMFl5UFkH70         gsmpgD0Hffu3h0jMWBEsFJi2xcZQ2vG3B0Ssy4gP3W0ogs8k8tg/NVI8CqTPXhEhF4lR         RB2F9q3JBRfC/N84fkMxqFf7YwRZs7N4yQv9evWA+7jyOAUYux6Pc7lkNNB033dpFWOJ         M3GD064VNF4eYbP3OGr0f8BrA7fEMNSx/iJER/akNAJKdc83Y04UGSz3fL5DjDBbfOso         R4uiRGJXyp3q9VsgLuPnTkgJ/BQ6rzg1koXf8zo2toEsJf0DRnphXmA+3GXgY5IjacjX         SN8Q=="
+                    },
+                    {
+                        "name": "ARC-Message-Signature",
+                        "value": "i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20160816;        h=to:subject:message-id:date:from:mime-version:dkim-signature;        bh=ChadbcynXkVQCirNT1efdxbElLd1M2UytkSMQ1RSdDY=;        b=qHlIyuXnijGpRbeOGd1+PGsYlMXjPFAT10T4tNH+jSjxDrGp7STg7aOlvtHXqUglSM         GmO/KZ7Jj9t4hmUIbI+hz20IsHBLpNdD5Ip7n/da20B+H4eqZk+VaSYQdhl9XMLBLe++         fA2CwKJPNDgtKY3vQFNKD9rRMr9UMYvr2YR43CkkgIPTt0hsEa9BDa/saeDH6dU8152v         q3NLLwAEcVkZ8GSVooFu8zWR9sihZVmbyXGL+1l9tOsBi/kr6sNa4wGXubgJN6gzfcCR         S+wZxWHefxVOWWQacku06AvCib2scwJMPiYeNajZZ4NTOzf8khlz3cEDhLm76edMdKhy         nzzw=="
+                    },
+                    {
+                        "name": "ARC-Authentication-Results",
+                        "value": "i=1; mx.google.com;       dkim=pass header.i=@gmail.com header.s=20210112 header.b=OZUh2uDE;       spf=pass (google.com: domain of zdillon90@gmail.com designates 209.85.220.41 as permitted sender) smtp.mailfrom=zdillon90@gmail.com;       dmarc=pass (p=NONE sp=QUARANTINE dis=NONE) header.from=gmail.com"
+                    },
+                    {
+                        "name": "Return-Path",
+                        "value": "<zdillon90@gmail.com>"
+                    },
+                    {
+                        "name": "Received",
+                        "value": "from mail-sor-f41.google.com (mail-sor-f41.google.com. [209.85.220.41])        by mx.google.com with SMTPS id l8sor2671644lfg.14.2021.12.29.13.36.12        for <zach@shapeways.com>        (Google Transport Security);        Wed, 29 Dec 2021 13:36:12 -0800 (PST)"
+                    },
+                    {
+                        "name": "Received-SPF",
+                        "value": "pass (google.com: domain of zdillon90@gmail.com designates 209.85.220.41 as permitted sender) client-ip=209.85.220.41;"
+                    },
+                    {
+                        "name": "Authentication-Results",
+                        "value": "mx.google.com;       dkim=pass header.i=@gmail.com header.s=20210112 header.b=OZUh2uDE;       spf=pass (google.com: domain of zdillon90@gmail.com designates 209.85.220.41 as permitted sender) smtp.mailfrom=zdillon90@gmail.com;       dmarc=pass (p=NONE sp=QUARANTINE dis=NONE) header.from=gmail.com"
+                    },
+                    {
+                        "name": "DKIM-Signature",
+                        "value": "v=1; a=rsa-sha256; c=relaxed/relaxed;        d=gmail.com; s=20210112;        h=mime-version:from:date:message-id:subject:to;        bh=ChadbcynXkVQCirNT1efdxbElLd1M2UytkSMQ1RSdDY=;        b=OZUh2uDEFBD2tKJZyzpuoWWHc7UxUz/uFOWB0qIsRXwUk2MUNuF7HYP5/7Asp6kur7         g5I89cPcsnDt8d27XXheW3USGmYKt5ux03zukngoaXz2gsPiU3X2Ek/HwlGnUYgGScoT         VmnGPIPagcUueCUt4fZyIDBK1Ufl4sVu+Oj+VB1flje941s0sm/Z16B/5WkPFSN9U9wE         2FGrZInlr66K/cJ7+YT8q3Os8E192WhBTx5idWXLKzzVYR44dkDDzUDuo9c8R3qOxJKq         tdaWVvJ2u6YyI3dg4UrZU+GvD7+aAlyl0dZYNvuMvD25tSEUesju+TIh6bUyziEIFIjY         qZ5Q=="
+                    },
+                    {
+                        "name": "X-Google-DKIM-Signature",
+                        "value": "v=1; a=rsa-sha256; c=relaxed/relaxed;        d=1e100.net; s=20210112;        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;        bh=ChadbcynXkVQCirNT1efdxbElLd1M2UytkSMQ1RSdDY=;        b=1LktuH6Wsk5iL5alLcIO71urZz8uHxhMBOFFNWBgZ9Hdg9X7PgSzH0fhcxeuooWRT7         7bg+b4kbn/f7uDRHE2fwwfzRFFMpHO22jD3GHM7zO6oSKBBC8m3z7S2J0sUx4VxX/1MJ         BnXrR/FKKi9lL1O5nI9cx7who30TCTNRm0fPKfidY6W0UVEfxOUolS/H48uQ9IGluQGQ         qqzY/yLDD5cd365RQWvKpMWJ0dWZvJ8V5gy1ifk2reNbaDQwo3D5v1S1GxkpkcJ1HXSu         ULf/s/qy4JK9DZ8PlCBxote9BejIXtz4Ox7W9SBFP+Grr5EPCh5hVf7FRB5/tCcg7AND         9AWA=="
+                    },
+                    {
+                        "name": "X-Gm-Message-State",
+                        "value": "AOAM532YxopU7p+zCwED5qU94jCuv5T/6BQIoqDXQ2oNQRGtnKTNqzok SAp2Bn1AegK2d8e4geu8QCiyyTkB3trEXHJDeJUsEvJZ"
+                    },
+                    {
+                        "name": "X-Google-Smtp-Source",
+                        "value": "ABdhPJzLNQf4fRmztXHO8aNKZCvf+EZ/ac1vLTLGVsGg/TAsfY4H2snTvgrc1gfxnAnWpDc134gNgWnkmKw3jlCla7E="
+                    },
+                    {
+                        "name": "X-Received",
+                        "value": "by 2002:a05:6512:40d:: with SMTP id u13mr24473500lfk.327.1640813771836; Wed, 29 Dec 2021 13:36:11 -0800 (PST)"
+                    },
+                    {
+                        "name": "MIME-Version",
+                        "value": "1.0"
+                    },
+                    {
+                        "name": "From",
+                        "value": "Zach Dillon <zdillon90@gmail.com>"
+                    },
+                    {
+                        "name": "Date",
+                        "value": "Wed, 29 Dec 2021 16:36:00 -0500"
+                    },
+                    {
+                        "name": "Message-ID",
+                        "value": "<CAGSKhpiuFa5NN0wKU4NiP6Wudd9StCFYE9L4MQbAfzuM5p3u3Q@mail.gmail.com>"
+                    },
+                    {
+                        "name": "Subject",
+                        "value": "rfq-test"
+                    },
+                    {
+                        "name": "To",
+                        "value": "Zach Dillon <zach@shapeways.com>"
+                    },
+                    {
+                        "name": "Content-Type",
+                        "value": "multipart/alternative; boundary=\"000000000000034f2c05d44fba27\""
+                    }
+                ],
+                "body": {
+                    "size": 0
+                },
+                "parts": [
+                    {
+                        "partId": "0",
+                        "mimeType": "text/plain",
+                        "filename": "",
+                        "headers": [
+                            {
+                                "name": "Content-Type",
+                                "value": "text/plain; charset=\"UTF-8\""
+                            }
+                        ],
+                        "body": {
+                            "size": 27,
+                            "data": "SSdtIGFuIFJGUSByZXF1ZXN0LCB3aG9vIQ0K"
+                        }
+                    },
+                    {
+                        "partId": "1",
+                        "mimeType": "text/html",
+                        "filename": "",
+                        "headers": [
+                            {
+                                "name": "Content-Type",
+                                "value": "text/html; charset=\"UTF-8\""
+                            }
+                        ],
+                        "body": {
+                            "size": 52,
+                            "data": "PGRpdiBkaXI9Imx0ciI-SSYjMzk7bSBhbiBSRlEgcmVxdWVzdCwgd2hvbyE8L2Rpdj4NCg=="
+                        }
+                    }
+                ]
+            },
+            "sizeEstimate": 4754,
+            "historyId": "13852835",
+            "internalDate": "1640813760000"
+        }
+    ]
+}
