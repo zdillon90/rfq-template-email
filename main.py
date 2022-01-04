@@ -3,6 +3,8 @@ from __future__ import print_function
 import os.path
 from re import sub
 import json
+from email.mime.text import MIMEText
+import base64
 
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
@@ -11,7 +13,7 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
 # If modifying these scopes, delete the file token.json.
-SCOPES = ['https://www.googleapis.com/auth/gmail.readonly']
+SCOPES = ['https://www.googleapis.com/auth/gmail.modify']
 
 
 template = """
@@ -45,7 +47,28 @@ def create_message(sender, to, subject, message_text):
     message['to'] = to
     message['from'] = sender
     message['subject'] = subject
-    return {'raw': base64.urlsafe_b64encode(message.as_string())}
+    return {'raw': base64.urlsafe_b64encode(message.as_string().encode()).decode()}
+
+
+def send_message(service, user_id, message):
+    """Send an email message.
+
+    Args:
+      service: Authorized Gmail API service instance.
+      user_id: User's email address. The special value "me"
+      can be used to indicate the authenticated user.
+      message: Message to be sent.
+
+    Returns:
+      Sent Message.
+    """
+    try:
+        message = (service.users().messages().send(userId=user_id, body=message)
+                   .execute())
+        print('Message Id: %s' % message['id'])
+        return message
+    except HttpError as error:
+        print('An error occurred: %s' % error)
 
 
 def main():
@@ -93,15 +116,21 @@ def main():
                     if header['name'] == 'Subject':
                         subject = header['value']
                         break
+                for header in msg['headers']:
                     if header['name'] == 'From':
                         from_email = header['value']
                         break
+                for header in msg['headers']:
                     if header['name'] == 'To':
                         to_email = header['value']
                         break
                 # TODO: Add reply to email here
+                print(to_email)
+                print(from_email)
+                print(subject)
                 template_msg = create_message(
                     from_email, to_email, subject, template)
+                send_message(service, 'me', template_msg)
     except HttpError as error:
         # TODO(developer) - Handle errors from gmail API.
         print(f'An error occurred: {error}')
