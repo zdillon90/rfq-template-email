@@ -17,21 +17,21 @@ SCOPES = ['https://www.googleapis.com/auth/gmail.modify']
 
 
 template = """
-Account: 
-Model(s): 
-Directional Quote [D] or Production [P]: 
-# of Models to Quote (Quantity): 
-Quantities to quote of each Model: 
-Technology: 
-Material: 
-Finish: 
-Expected Lead Time: 
-Additional Instructions/Comments: 
+Account:
+Model(s):
+Directional Quote [D] or Production [P]:
+# of Models to Quote (Quantity):
+Quantities to quote of each Model:
+Technology:
+Material:
+Finish:
+Expected Lead Time:
+Additional Instructions/Comments:
 End Use:
 """
 
 
-def create_message(sender, to, subject, message_text):
+def create_message(sender, to, subject, message_text, message_id, thread_id):
     """Create a message for an email.
 
     Args:
@@ -46,8 +46,11 @@ def create_message(sender, to, subject, message_text):
     message = MIMEText(message_text)
     message['to'] = to
     message['from'] = sender
-    message['subject'] = subject
-    return {'raw': base64.urlsafe_b64encode(message.as_string().encode()).decode()}
+    message['Subject'] = subject
+    message['threadId'] = thread_id
+    message['In-Reply-To'] = message_id
+    message['References'] = message_id
+    return {'raw': base64.urlsafe_b64encode(message.as_bytes()).decode(), 'threadId': thread_id}
 
 
 def send_message(service, user_id, message):
@@ -112,6 +115,7 @@ def main():
                 subject = ''
                 from_email = ''
                 to_email = ''
+                message_id = ''
                 for header in msg['headers']:
                     if header['name'] == 'Subject':
                         subject = header['value']
@@ -124,12 +128,15 @@ def main():
                     if header['name'] == 'To':
                         to_email = header['value']
                         break
+                for header in msg['headers']:
+                    if header['name'] == 'Message-ID':
+                        message_id = header['value']
+                        break
                 # TODO: Add reply to email here
-                print(to_email)
-                print(from_email)
                 print(subject)
+                print(message_id)
                 template_msg = create_message(
-                    from_email, to_email, subject, template)
+                    from_email, to_email, subject, template, message_id, thread_id)
                 send_message(service, 'me', template_msg)
     except HttpError as error:
         # TODO(developer) - Handle errors from gmail API.

@@ -1,3 +1,2 @@
 .env
-creds.json
-token.json
+*.json
